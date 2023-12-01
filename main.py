@@ -3,9 +3,12 @@ import pandas as pd
 
 app = Flask(__name__)
 
+stations = pd.read_csv("data_small/stations.txt", skiprows=17)
+stations.columns = [col.strip() for col in stations.columns] # remove unnecessary whitesspace from column names
+stations = stations[["STAID", "STANAME"]]
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", data=stations.to_html())
 
 
 @app.route("/api/v1/<station>/<date>")
